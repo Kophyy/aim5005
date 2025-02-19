@@ -72,18 +72,31 @@ class TestFeatures(TestCase):
         assert (result == expected).all(), "Scaler transform does not return expected values. Expect {}. Got: {}".format(expected.reshape(1,-1), result.reshape(1,-1))
     
     # test for LabelEncoder
-    def test_label_encoder(self):
+    def test_label_encoder_african_countries(self):
         """
-        Custom test: Verify that LabelEncoder correctly maps string labels to numeric values.
+        Custom test: Verify that LabelEncoder correctly maps African countries labels to numeric values.
         Given an input list of labels, np.unique will sort them, so:
-          "bird" -> 0, "cat" -> 1, "dog" -> 2.
-        For input ["cat", "dog", "cat", "bird"], we expect [1, 2, 1, 0].
+          "Kenya" -> 0, "Nigeria" -> 1, "South Africa" -> 2.
+        For input ["Nigeria", "South Africa", "Nigeria", "Kenya"], we expect [1, 2, 1, 0].
         """
         encoder = LabelEncoder()
-        data = ["cat", "dog", "cat", "bird"]
+        data = ["Nigeria", "South Africa", "Nigeria", "Kenya"]
         expected = np.array([1, 2, 1, 0])
         result = encoder.fit_transform(data)
         assert (result == expected).all(), f"Label encoder did not produce expected result. Got {result}, expected {expected}"
-    
+
+    def test_label_encoder_african_countries_single_value(self):
+        """
+        Custom test: Verify that LabelEncoder correctly maps a single African country label to numeric value.
+        Given an input list of labels, np.unique will sort them, so:
+          "Kenya" -> 0, "Nigeria" -> 1, "South Africa" -> 2.
+        For input ["Kenya"], we expect [0].
+        """
+        encoder = LabelEncoder()
+        data = ["Kenya"]
+        expected = np.array([0])
+        result = encoder.fit_transform(data)
+        assert (result == expected).all(), f"Label encoder did not produce expected result. Got {result}, expected {expected}"
+
 if __name__ == '__main__':
     unittest.main()
